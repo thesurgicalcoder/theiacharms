@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { @apply bg-brand-cream text-brand-dark font-sans antialiased; }
+  h1, h2, h3, h4 { @apply font-serif; }
+}
+@layer components {
+  .btn-primary { @apply inline-flex items-center justify-center gap-2 rounded-full bg-brand-burgundy px-6 py-3 text-sm font-medium text-white ring-1 ring-brand-gold transition hover:bg-brand-wine; }
+  .btn-outline { @apply inline-flex items-center justify-center gap-2 rounded-full border border-brand-gold px-5 py-2.5 text-sm font-medium text-brand-burgundy transition hover:bg-brand-blush; }
+  .section { @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8; }
+  .section-title { @apply text-center text-3xl font-medium text-brand-burgundy sm:text-4xl; }
+  .gold-rule { @apply mx-auto mt-3 h-px w-24 bg-gradient-to-r from-transparent via-brand-gold to-transparent; }
+}
