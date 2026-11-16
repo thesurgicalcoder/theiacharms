@@ -1,0 +1,31 @@
+# General
+# Node modules and logs
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+pnpm-lock.yaml
+
+# Build artifacts
+dist/
+build/
+.tmp/
+
+# Environment files (should not be committed)
+.env
+*.env
+
+# OS generated files
+Thumbs.db
+.DS_Store
+
+# Log files
+logs/
+*.log
+
+# VSCode settings
+.vscode/
+
+# Specific data folder not to upload
+theia-charms-api/data/
