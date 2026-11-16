@@ -1,43 +1,70 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCatalog } from '../../context/CatalogContext';
-import { useUI } from '../../context/UIContext';
-import { formatPrice } from '../../utils/formatters';
-import ProductImage from '../common/ProductImage';
+import { siteImage, safeLink } from '../../utils/images';
+
+const CATS_LINE = 'Earrings | Pendants | Bracelets | Rings | Hair Accessories & More';
+
+function DefaultSlide() {
+  const desktop = siteImage('hero-desktop'); const mobile = siteImage('hero-mobile');
+  const phone = mobile || desktop;
+  return (
+    <div className="relative bg-gradient-to-br from-brand-blush to-brand-cream">
+      {desktop && <img src={desktop} alt="" className="absolute inset-0 hidden h-full w-full object-cover object-right md:block" />}
+      <div className="absolute inset-y-0 left-0 hidden w-3/5 bg-gradient-to-r from-brand-blush/85 via-brand-blush/35 to-transparent md:block" />
+      <div className="relative mx-auto grid max-w-[1600px] md:min-h-[440px] md:grid-cols-[46%_1fr] lg:min-h-[500px]">
+        {phone && <img src={phone} alt="THEIA CHARMS accessories" className={`max-h-[480px] w-full object-cover md:hidden ${mobile ? 'aspect-[4/5]' : 'aspect-[4/3] object-right'}`} />}
+        <div className="flex flex-col justify-center px-6 py-8 text-center md:px-10 md:py-12 md:text-left lg:px-16">
+          <h1 className="font-serif text-4xl italic leading-tight text-brand-dark sm:text-5xl lg:text-6xl">Trendy Accessories <br className="hidden md:block" />for <span className="font-semibold text-brand-burgundy">Every You!</span> <span className="not-italic">♡</span></h1>
+          <p className="mt-4 text-sm tracking-wide text-brand-dark/80">{CATS_LINE}</p>
+          <div className="mt-6"><Link to="/catalogue" className="btn-primary">Explore Collection →</Link></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BannerSlide({ b }) {
+  const link = safeLink(b.linkUrl);
+  const inner = (
+    <div className="relative min-h-[320px] md:min-h-[460px]">
+      <img src={b.imageUrl} alt={b.title || ''} className="absolute inset-0 h-full w-full object-cover" />
+      <div className="absolute inset-0 bg-gradient-to-r from-brand-deepwine/75 via-brand-deepwine/25 to-transparent" />
+      <div className="relative mx-auto flex min-h-[320px] max-w-[1600px] flex-col justify-center px-6 text-white md:min-h-[460px] md:px-16">
+        {b.title && <h2 className="max-w-xl font-serif text-4xl italic md:text-5xl">{b.title}</h2>}
+        {b.subtitle && <p className="mt-3 max-w-md text-sm text-white/85">{b.subtitle}</p>}
+      </div>
+    </div>
+  );
+  if (!link) return inner;
+  return link.startsWith('/') ? <Link to={link}>{inner}</Link> : <a href={link} target="_blank" rel="noopener noreferrer">{inner}</a>;
+}
 
 export default function Hero() {
-  const { products } = useCatalog();
-  const { openProduct } = useUI();
-  const slides = products.filter((p) => p.isFeatured && !p.isSoldOut).slice(0, 5);
+  const { banners } = useCatalog();
+  const slides = [{ id: 'default' }, ...banners.filter((b) => b.imageUrl).map((b) => ({ ...b, id: b._id }))];
+  const n = slides.length;
   const [i, setI] = useState(0);
-  useEffect(() => { if (slides.length < 2) return undefined; const t = setInterval(() => setI((x) => (x + 1) % slides.length), 4500); return () => clearInterval(t); }, [slides.length]);
-  const cur = slides[i % (slides.length || 1)];
+  useEffect(() => {
+    if (n < 2) return undefined;
+    const t = setInterval(() => setI((x) => (x + 1) % n), 6500);
+    return () => clearInterval(t);
+  }, [n, i]);
+  const cur = slides[i % n];
+  const arrow = 'absolute top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-brand-gold bg-white/90 text-lg text-brand-burgundy shadow hover:bg-white';
 
   return (
-    <section className="bg-gradient-to-br from-brand-blush to-brand-cream">
-      <div className="section grid items-center gap-10 py-12 lg:grid-cols-2 lg:py-20">
-        <div className="text-center lg:text-left">
-          <h1 className="text-4xl font-semibold leading-tight text-brand-burgundy sm:text-5xl lg:text-6xl">Trendy Accessories for Every You! <span className="text-brand-gold">♡</span></h1>
-          <p className="mt-5 text-sm tracking-wide text-brand-dark/70">Earrings | Pendants | Bracelets | Rings | Hair Accessories & More</p>
-          <Link to="/catalogue" className="btn-primary mt-8">Explore Collection →</Link>
-        </div>
-        {cur && (
-          <div className="mx-auto w-full max-w-sm">
-            <button onClick={() => openProduct(cur)} className="block w-full overflow-hidden rounded-3xl border border-brand-gold bg-white p-3 text-left shadow-xl">
-              <div className="relative aspect-square overflow-hidden rounded-2xl"><ProductImage product={cur} width={700} />
-                <span className="absolute left-3 top-3 rounded bg-brand-wine px-2 py-1 text-[9px] tracking-[0.2em] text-brand-goldlight">THEIA CHARMS</span></div>
-              <p className="mt-3 font-serif text-xl text-brand-burgundy">{cur.name}</p><p className="text-sm text-brand-dark/70">{formatPrice(cur.price)}</p>
-            </button>
-            {slides.length > 1 && (
-              <div className="mt-4 flex items-center justify-center gap-3">
-                <button onClick={() => setI((x) => (x - 1 + slides.length) % slides.length)} aria-label="Previous" className="h-8 w-8 rounded-full border border-brand-gold">‹</button>
-                {slides.map((_, k) => <button key={k} onClick={() => setI(k)} aria-label={`Slide ${k + 1}`} className={`h-2 rounded-full transition-all ${k === i ? 'w-6 bg-brand-burgundy' : 'w-2 bg-brand-gold/50'}`} />)}
-                <button onClick={() => setI((x) => (x + 1) % slides.length)} aria-label="Next" className="h-8 w-8 rounded-full border border-brand-gold">›</button>
-              </div>
-            )}
+    <section className="relative overflow-hidden" aria-roledescription="carousel">
+      {cur.id === 'default' ? <DefaultSlide /> : <BannerSlide b={cur} />}
+      {n > 1 && (
+        <>
+          <button onClick={() => setI((i - 1 + n) % n)} aria-label="Previous slide" className={`${arrow} left-3`}>‹</button>
+          <button onClick={() => setI((i + 1) % n)} aria-label="Next slide" className={`${arrow} right-3`}>›</button>
+          <div className="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 gap-2">
+            {slides.map((s, k) => <button key={s.id} onClick={() => setI(k)} aria-label={`Slide ${k + 1}`} className={`h-2.5 rounded-full transition-all ${k === i ? 'w-7 bg-brand-burgundy' : 'w-2.5 bg-brand-burgundy/35'}`} />)}
           </div>
-        )}
-      </div>
+        </>
+      )}
     </section>
   );
 }

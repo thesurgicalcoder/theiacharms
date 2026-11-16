@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { NavLink, Outlet, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { RoleBadge } from './ui';
+import { siteImage } from '../utils/images';
 
 const NAV = [
   ['/', '📊', 'Dashboard', 'viewProducts', true], ['/products', '💎', 'Products', 'viewProducts'], ['/products/new', '➕', 'Add Product', 'editProducts'], ['/import', '📄', 'Import from PDF', 'import'],
@@ -19,7 +20,7 @@ export default function AdminLayout() {
   return (
     <div className="min-h-screen lg:flex">
       <aside className={`${open ? 'flex' : 'hidden'} fixed inset-y-0 left-0 z-40 w-64 flex-col bg-brand-wine p-4 lg:sticky lg:top-0 lg:flex lg:h-screen`}>
-        <div className="mb-6 px-2 pt-2"><p className="font-serif text-xl tracking-[0.15em] text-white">THEIA CHARMS</p><p className="text-[10px] uppercase tracking-[0.25em] text-brand-gold">Admin Panel</p></div>
+        <div className="mb-6 flex items-center gap-2.5 px-2 pt-2">{siteImage('favicon') && <img src={siteImage('favicon')} alt="" className="h-10 w-10 object-contain brightness-0 invert" />}<div><p className="font-serif text-lg tracking-[0.12em] text-white">THEIA CHARMS</p><p className="text-[10px] uppercase tracking-[0.25em] text-brand-gold">Admin Panel</p></div></div>
         <nav className="flex-1 space-y-1 overflow-y-auto" onClick={() => setOpen(false)}>
           {NAV.filter(([, , , perm]) => can(perm)).map(([to, icon, text, , end]) => <NavLink key={to} to={to} end={end || to === '/products'} className={link}><span>{icon}</span>{text}</NavLink>)}
         </nav>

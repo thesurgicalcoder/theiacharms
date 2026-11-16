@@ -3,6 +3,7 @@ import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/adminApi';
 import { ErrorBox } from '../components/ui';
+import { siteImage } from '../utils/images';
 
 export default function LoginPage() {
   const { user, login } = useAuth();
@@ -16,6 +17,7 @@ export default function LoginPage() {
   const [msg, setMsg] = useState('');
   const [busy, setBusy] = useState(false);
   if (user) return <Navigate to="/" replace />;
+  const bg = siteImage('admin-login-bg'); const emblem = siteImage('favicon');
 
   const submit = async (e) => {
     e.preventDefault(); setErr(''); setMsg(''); setBusy(true);
@@ -27,9 +29,14 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-brand-blush to-brand-cream p-4">
-      <form onSubmit={submit} className="w-full max-w-md rounded-3xl border border-brand-gold/40 bg-white p-8 shadow-xl">
-        <div className="mb-6 text-center"><p className="font-serif text-2xl tracking-[0.15em] text-brand-burgundy">THEIA CHARMS</p><p className="text-xs uppercase tracking-[0.3em] text-brand-gold">Admin Panel</p></div>
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-brand-blush to-brand-cream p-4" style={bg ? { backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}>
+      <div className="grid w-full max-w-5xl items-center gap-8 md:grid-cols-2">
+      <div className="hidden text-center md:block">
+        {emblem && <img src={emblem} alt="" className="mx-auto h-36 w-36 object-contain" />}
+        <p className="mt-2 font-serif text-4xl tracking-[0.12em] text-brand-burgundy">THEIA CHARMS</p><p className="mt-1 font-serif text-xl text-brand-dark/80">Admin Panel</p>
+      </div>
+      <form onSubmit={submit} className="w-full max-w-md justify-self-center rounded-3xl border border-brand-gold/40 bg-white/95 p-8 shadow-xl">
+        <div className="mb-6 text-center md:hidden">{emblem && <img src={emblem} alt="" className="mx-auto mb-2 h-16 w-16 object-contain" />}<p className="font-serif text-2xl tracking-[0.15em] text-brand-burgundy">THEIA CHARMS</p><p className="text-xs uppercase tracking-[0.3em] text-brand-gold">Admin Panel</p></div>
         <ErrorBox error={err} />{msg && <p className="mb-4 rounded-xl bg-green-50 px-4 py-3 text-sm text-green-800">{msg}</p>}
         {mode !== 'reset' && <div className="mb-4"><label className="label" htmlFor="email">Email</label><input id="email" type="email" required autoComplete="username" className="input" value={f.email} onChange={(e) => setF({ ...f, email: e.target.value })} /></div>}
         {mode !== 'forgot' && (
@@ -41,6 +48,7 @@ export default function LoginPage() {
         <button className="btn-primary w-full" disabled={busy}>{busy ? 'Please wait…' : mode === 'login' ? 'Login →' : mode === 'forgot' ? 'Send reset link' : 'Set new password'}</button>
         {mode === 'forgot' && <button type="button" onClick={() => setMode('login')} className="mt-4 w-full text-sm text-brand-burgundy hover:underline">← Back to login</button>}
       </form>
+      </div>
     </div>
   );
 }

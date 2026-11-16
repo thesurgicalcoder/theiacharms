@@ -3,9 +3,9 @@ import TrustStrip from '../components/home/TrustStrip';
 import CategoryGrid from '../components/home/CategoryGrid';
 import FestiveBanner from '../components/home/FestiveBanner';
 import NewArrivals from '../components/home/NewArrivals';
-import CollectionsRow from '../components/home/CollectionsRow';
-import StorySection from '../components/home/StorySection';
+import CollectionsBand from '../components/home/CollectionsBand';
+import WhyChoose from '../components/home/WhyChoose';
 
 export default function HomePage() {
-  return (<><Hero /><TrustStrip /><CategoryGrid /><FestiveBanner /><NewArrivals /><CollectionsRow /><StorySection /></>);
+  return (<><Hero /><TrustStrip /><CategoryGrid /><FestiveBanner /><NewArrivals /><CollectionsBand /><WhyChoose /></>);
 }
