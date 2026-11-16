@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-const COLS = [['minimal', 'Minimal Collection', '🤍'], ['festive', 'Festive Collection', '🪔'], ['gift', 'Gift Collection', '🎁'], ['daily', 'Daily Wear', '☀️']];
+const COLS = [['minimal', 'Minimal Collection', '🤍'], ['wedding', 'Wedding Collection', '🪔'], ['gift', 'Gift Collection', '🎁'], ['daily', 'Daily Wear', '☀️']];
 export default function CollectionsRow() {
   return (
     <section className="section mt-16">

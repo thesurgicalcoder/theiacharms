@@ -15,7 +15,7 @@ import CataloguePage from './pages/CataloguePage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 
-function ScrollTop() { const { pathname } = useLocation(); useEffect(() => window.scrollTo(0, 0), [pathname]); return null; }
+function ScrollTop() { const { pathname } = useLocation(); useEffect(() => { window.scrollTo(0, 0); }, [pathname]); return null; }
 const NotFound = () => <div className="section py-24 text-center"><h1 className="text-4xl text-brand-burgundy">Page not found</h1><Link to="/" className="btn-primary mt-6">Back to Home</Link></div>;
 
 export default function App() {

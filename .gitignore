@@ -29,4 +29,10 @@ logs/
 
 # Specific data folder not to upload
 theia-charms-api/data/
+theia-charmas-api/uploads/
 
+.venv/
+.agent/ 
+.agents/
+.gemini/
+.gsd/
